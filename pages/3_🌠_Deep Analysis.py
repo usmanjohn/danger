@@ -15,7 +15,7 @@ df_toronto = pd.DataFrame(dict(number=[100, 70, 60, 42, 20], stage=stages))
 df_toronto['Internship'] = 'Local Intern'
 df = pd.concat([df_mtl, df_toronto], axis=0)
 fig = px.funnel(df, x='number', y='stage', color='Internship', title = 'Local & International Internship')
-fig.update_layout(title_x = 0.5, title_font_color = 'red')
+fig.update_layout(title_x = 0.5)
 
 
 
@@ -47,7 +47,7 @@ colors = {'Not Started': 'rgb(220, 0, 0)',
 fig = ff.create_gantt(df, colors=colors, index_col='Resource', show_colorbar=True,
                       group_tasks=True, title='Duration')
 
-fig.update_layout(margin = dict(t = 0,l = 0,r = 0,b = 0), legend_x = 0, legend_y = 0.1, legend_font_size = 17, font_size = 20)
+fig.update_layout(margin = dict(t = 0,l = 0,r = 0,b = 0), legend_x = 0, legend_y = 0.1, legend_font_size = 17, font_size = 20, title_x = 1)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown('---')
 st.markdown('---')
