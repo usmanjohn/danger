@@ -15,7 +15,7 @@ st.set_page_config(page_title='Visual Insights',
 # Introduction
 st.markdown("<h2 style = 'text-align:center'>Welcome Home</h2>",unsafe_allow_html= True)
 
-st.markdown("You have full access to **everything** here!")
+st.markdown("Let's analyze some data here!")
 
 # Reading the dataset
 @st.cache
@@ -170,7 +170,7 @@ fig1.add_trace(go.Bar(
     x=group_salary['department'],
     y=group_salary['placed_perc'],
     name='Have a Job',
-    marker_color='green',
+    
     text = group_salary['placed_perc']
 ))
 
@@ -181,7 +181,7 @@ fig1.add_trace(go.Bar(
     text=group_salary['not_placed_perc']
 ))
 fig1.update_layout(title_text='Job Placement of Students', title_font_size = 22, 
-    title_x = 0.5, margin_t = 120,
+    title_x = 0.6, margin_t = 120,
     xaxis_tickangle = -45, xaxis_title = 'Department',height = 500,
     yaxis_title = 'Percentage', legend_font_size = 18)
 fig1.update_traces(texttemplate='%{text:.2s}', textposition='inside', opacity = 0.9)
@@ -201,7 +201,7 @@ fig_n = px.sunburst(df_1, path=['status','gender', 'department'], color = df_1.i
     color_continuous_scale='RdBu', width=1000, height=1000)
 fig_n.update_coloraxes(showscale=False)
 fig_n.update_layout(height = 700, title_text = 'How likely the Student get job by Social Factors?', 
-    title_font_size = 20, title_x = 0.5)
+    title_font_size = 20, title_x = 0.6)
 fig_n.update_traces(textinfo="label+percent entry")
 st.plotly_chart(fig_n, use_container_width = True,height = 700)
 
