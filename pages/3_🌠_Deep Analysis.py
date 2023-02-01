@@ -81,7 +81,7 @@ fig.add_trace(go.Funnel(
     textposition = "outside",
     textinfo = "value+percent previous"))
 
-fig.update_layout(title_text = 'Advertisement Effect', title_pad_r = 4, title_pad_l = 6)
+fig.update_layout(title_text = 'Which Advertisement Effect', title_pad_r = 4, title_pad_l = 6)
 
 
 st.plotly_chart(fig, use_container_width=True)
