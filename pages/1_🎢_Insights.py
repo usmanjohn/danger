@@ -178,7 +178,7 @@ fig1.add_trace(go.Bar(
     x=group_salary['department'],
     y=group_salary['not_placed_perc'],
     name="Not have a Job",
-    marker_color='chocolate', text=group_salary['not_placed_perc']
+    text=group_salary['not_placed_perc']
 ))
 fig1.update_layout(title_text='Job Placement of Students', title_font_size = 22, 
     title_x = 0.5, margin_t = 120,
