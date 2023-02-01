@@ -160,9 +160,10 @@ group_salary['placed_perc'] = group_salary['placed_perc'].round()
 
 fig = go.Figure(data=[go.Pie(labels=grouped_df_3['department'], values=grouped_df_3['counting'],
  pull=pull_values, title= 'Students by Department')])
-fig.update_layout(margin = dict(t = 0,l = 0,r = 0,b = 0), legend_x = 0, 
- legend_y = 0.1, legend_font_size = 17, font_size = 20)
-fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20,
+fig.update_layout(margin = dict(t = 0,l = 0,r = 0,b = 0), legend_x = 0,
+    title_pad_b = 20, title_pad_l = 20,title_xanchor = 'left', title_yanchor = 'bottom',
+    legend_y = 0.1, legend_font_size = 17, font_size = 20)
+fig.update_traces(hoverinfo='label+percent', textinfo='label+value', textfont_size=20,textposition = 'outside',
                   marker=dict(line=dict(color='#000000', width=2)))
 
 fig1 = go.Figure()
