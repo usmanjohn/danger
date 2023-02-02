@@ -19,6 +19,27 @@ if submit:
     st.write('You have entered: ', my_input)
 
 
+import requests
+
+from streamlit_lottie import st_lottie
+import json
+
+def load_lottifile(filepath: str):
+    with open(filepath, 'r') as f:
+        return json.load(f)
+
+def lottie_url(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+lottie_hello = lottie_url('https://assets5.lottiefiles.com/packages/lf20_fWd36IjnsR.json')
+lottie_bye = load_lottifile("alfa.json")
+st_lottie(lottie_bye, speed = 1, height = 300, width=700)
+
+
+
 
 hide_st_style = """
         <style>

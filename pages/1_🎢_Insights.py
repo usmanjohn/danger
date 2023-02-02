@@ -6,11 +6,24 @@ import seaborn as sns
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import pickle
+
+
 
 st.set_page_config(page_title='Visual Insights', 
     page_icon=':banana:', 
     layout='wide')
+
+# importing module
+from streamlit_extras.let_it_rain import rain
+
+rain(
+    emoji="🎈",
+    font_size=54,
+    falling_speed=5,
+    animation_length="infinite",
+)
+# importing required module
+
 
 # Introduction
 st.markdown("<h2 style = 'text-align:center'>Welcome Home</h2>",unsafe_allow_html= True)
@@ -55,6 +68,8 @@ dataset = next_data(df=df)
 
 # Dataset
 
+
+
 st.write(dataset)
 # Universal selection
 st.sidebar.header('Universal Filtering')
@@ -94,18 +109,9 @@ df_2 = df_1[(df_1['department'].isin(spec_for_grade))&(df_1['gender'].isin(gende
 # Distribution of scores
 title_pos = 0.5
 #fig1
-fig1 = px.histogram(data_frame = df_2, x = '10_grade', 
-    title="Students marks at 10th Grade", 
-    color_discrete_sequence=px.colors.qualitative.G10)
-fig1.update_layout(margin_l = 0, margin_r = 2,
-    xaxis_title = "Grade Percent",
-    title_x = title_pos, yaxis_title = 'Frequency')
-fig1.update_traces(marker=dict(color="aqua"),
-    marker_line_width=1,
-    marker_line_color="black")
 #fig2
 fig2 = px.histogram(data_frame = df_2, x = '12_grade', 
-    title="Students marks at 12th Grade")
+    title="Students marks at High School")
 fig2.update_layout(margin_l = 0, margin_r = 2, 
     yaxis_title = "",
     title_x = title_pos,
@@ -113,9 +119,20 @@ fig2.update_layout(margin_l = 0, margin_r = 2,
 fig2.update_traces(marker=dict(color="#e377c2"),
     marker_line_width=1,
     marker_line_color="black")
+
+fig1 = px.histogram(data_frame = df_2, x = 'degree_percent', 
+    title="Students marks at Bachelors", 
+    color_discrete_sequence=px.colors.qualitative.G10)
+fig1.update_layout(margin_l = 0, margin_r = 2,
+    xaxis_title = "Grade Percent",
+    title_x = title_pos, yaxis_title = 'Frequency')
+fig1.update_traces(marker=dict(color="aqua"),
+    marker_line_width=1,
+    marker_line_color="black")
+
 #fig_3
 fig3 = px.histogram(data_frame = df_2, x = 'post_grad_percent', 
-    title="Students marks at Post Graduation")
+    title="Students marks at Master")
 fig3.update_layout(margin_l = 0,margin_r = 2,yaxis_title = "",
  title_x = title_pos,xaxis_title = "Grade Percent")
 fig3.update_traces(marker=dict(color="antiquewhite"),
@@ -123,15 +140,15 @@ fig3.update_traces(marker=dict(color="antiquewhite"),
 
 
 left, middle, right = st.columns(3)
-left.plotly_chart(fig1, use_container_width = True)
-middle.plotly_chart(fig2, use_container_width = True)
+left.plotly_chart(fig2, use_container_width = True)
+middle.plotly_chart(fig1, use_container_width = True)
 right.plotly_chart(fig3, use_container_width = True)
 
 # Pie chart
 st.markdown('---')
 st.markdown('---')
 
-st.markdown("<h3 style = 'text-align:center'>Let's see Students by Department</h3>",
+st.markdown("<h3 style = 'text-align:center'>Students and their Employed Rate by Department</h3>",
     unsafe_allow_html=True)
 
 grouped_df_3 = df_1.groupby('department').count()[['gender']]
@@ -158,42 +175,114 @@ group_salary.reset_index(inplace=True)
 group_salary['not_placed_perc'] = group_salary['not_placed_perc'].round()
 group_salary['placed_perc'] = group_salary['placed_perc'].round()
 
-fig = go.Figure(data=[go.Pie(labels=grouped_df_3['department'], values=grouped_df_3['counting'],
- pull=pull_values, title= 'Students by Department')])
-fig.update_layout(margin = dict(t = 0,l = 0,r = 0,b = 0), legend_x = 0,
-    title_pad_b = 20, title_pad_l = 20,title_xanchor = 'left', title_yanchor = 'bottom',
-    legend_y = 0.1, legend_font_size = 17, font_size = 20)
-fig.update_traces(hoverinfo='label+percent', textinfo='label+value', textfont_size=20,textposition = 'outside',
-                  marker=dict(line=dict(color='#000000', width=2)))
+#fig = go.Figure(data=[go.Pie(labels=grouped_df_3['department'], values=grouped_df_3['counting'],
+#    pull=pull_values)])
+#fig.update_layout(
+#        title={
+#            'text' : "Department",
+#            'x':0.5,
+#            'xanchor': 'auto'},
+#    margin = dict(t = 60,l = 0,r = 0,b = 0), legend_x = 0,
+#    legend_y = 0.1, legend_font_size = 17, font_size = 20)
+#fig.update_traces(hoverinfo='label+percent', textinfo='label+value', textfont_size=20, textposition = 'outside',
+#                marker=dict(line=dict(color='#000000', width=2)))
 
-fig1 = go.Figure()
-fig1.add_trace(go.Bar(
+fig_l = make_subplots(
+    rows=1, cols=2,
+    specs=[[{"type": "domain"},{"type": "xy"}]])
+
+fig_l.add_trace(go.Bar(
     x=group_salary['department'],
     y=group_salary['placed_perc'],
-    name='Have a Job',
-    
-    text = group_salary['placed_perc']
-))
-
-fig1.add_trace(go.Bar(
+    name='Employed',
+    text = group_salary['placed_perc']),
+    row=1, col=2)
+fig_l.add_trace(go.Bar(
     x=group_salary['department'],
     y=group_salary['not_placed_perc'],
-    name="Not have a Job",
+    name="Unemployed",
     text=group_salary['not_placed_perc']
-))
-fig1.update_layout(title_text='Job Placement of Students', title_font_size = 22, 
-    title_x = 0.6, margin_t = 120,
-    xaxis_tickangle = -45, xaxis_title = 'Department',height = 500,
-    yaxis_title = 'Percentage', legend_font_size = 18)
-fig1.update_traces(texttemplate='%{text:.2s}', textposition='inside', opacity = 0.9)
+), row = 1, col = 2)
+
+fig_l.add_trace(go.Pie(labels=grouped_df_3['department'], values=grouped_df_3['counting'],
+                pull=pull_values),
+            row=1, col=1)
+
+fig_l.update_traces(hoverinfo='label+value', textinfo='label+percent', textposition = 'auto',showlegend = False,
+                marker=dict(line=dict(color='#000000', width=2)), selector=dict(type='pie'))
+
+fig_l.update_traces(showlegend = True, textposition = 'outside', 
+                marker=dict(line=dict(color='#000000', width=2)), selector=dict(type='bar'))
 
 
+fig_l.update_layout(
+    margin_t = 120,
+    xaxis_tickangle = -45, 
+    xaxis_title = 'Department',
+    height = 500,
+    yaxis_title = 'Percentage',
+    legend_font_size = 18)
 
+st.plotly_chart(fig_l, use_container_width=True)
 
-st.plotly_chart(fig, use_container_width=True,)
-st.markdown('---')
-st.markdown('---')
-st.plotly_chart(fig1, use_container_width= True, height = 500)
+#fig1 = go.Figure()
+#fig1.add_trace(go.Bar(
+#    x=group_salary['department'],
+#    y=group_salary['placed_perc'],
+#    name='Have a Job',
+#    
+#    text = group_salary['placed_perc']
+#))
+#
+#fig1.add_trace(go.Bar(
+#    x=group_salary['department'],
+#    y=group_salary['not_placed_perc'],
+#    name="Not have a Job",
+#    text=group_salary['not_placed_perc']
+#))
+#fig1.update_layout(title_text='Job Placement of Students', 
+#    title_font_size = 22, 
+#    title_x = 0.3,
+#    margin_t = 120,
+#    xaxis_tickangle = -45, 
+#    xaxis_title = 'Department',
+#    height = 500,
+#    yaxis_title = 'Percentage',
+#     legend_font_size = 18)
+#
+#fig1.update_traces(texttemplate='%{text:.2s}', textposition='inside', opacity = 0.9, )
+#
+#
+#
+#
+#
+#fig1 = go.Figure()
+#fig1.add_trace(go.Bar(
+#    x=group_salary['department'],
+#    y=group_salary['placed_perc'],
+#    name='Have a Job',
+#    
+#    text = group_salary['placed_perc']
+#))
+#
+#fig1.add_trace(go.Bar(
+#    x=group_salary['department'],
+#    y=group_salary['not_placed_perc'],
+#    name="Not have a Job",
+#    text=group_salary['not_placed_perc']
+#))
+#fig1.update_layout(title_text='Job Placement of Students', 
+#    title_font_size = 22, 
+#    title_x = 0.3,
+#    margin_t = 120,
+#    xaxis_tickangle = -45, 
+#    xaxis_title = 'Department',
+#    height = 500,
+#    yaxis_title = 'Percentage',
+#     legend_font_size = 18)
+#
+#fig1.update_traces(texttemplate='%{text:.2s}', textposition='inside', opacity = 0.9, )
+
 st.markdown('---')
 st.markdown('---')
 

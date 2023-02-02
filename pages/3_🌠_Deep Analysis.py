@@ -1,11 +1,30 @@
 import streamlit as st
 import plotly.express as px
 import pandas as pd
-
+import requests
 
 st.set_page_config(page_title='Deep Analysis', 
     page_icon=':bow_and_arrow:', 
     layout='wide')
+import streamlit_lottie as st_lottie
+import json
+
+def load_lottifile(filepath: str):
+    with open(filepath, 'r') as f:
+        return json.load(f)
+
+def lottie_url(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+lottie_hello = lottie_url('https://assets5.lottiefiles.com/packages/lf20_fWd36IjnsR.json')
+lottie_bye = load_lottifile("alfa.json")
+st_lottie(lottie_bye)
+st_lottie(lottie_hello, key = 'hello')
+
+
 
 
 stages = ["Website & Poster visit", "Contacting", "Potential applicants", "Application Done", "Get Accepted"]
