@@ -7,18 +7,30 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pickle
-
-
-
+import requests
+from streamlit_lottie import st_lottie
+import json
     
 st.set_page_config(page_title='Predictions', 
     page_icon=':game_die:', 
     layout='wide')
 
 # Introduction
+def lottie_url(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+pre_lottie=lottie_url('https://assets4.lottiefiles.com/packages/lf20_34qRI0i4ti.json')
+
+
+st_lottie(pre_lottie, key = 'target', height=150)
+st.markdown('---')
+
+
 
 #Modeling
-st.markdown('---')
 st.markdown("<h3 style = 'text-align:center'>Predict whether a student will get a job!</h3>",
     unsafe_allow_html=True)
 st.markdown('---')
@@ -106,10 +118,11 @@ class_predict_1 = class_scaled[:1]
 load_pickle = pickle.load(open('classifier_model.pkl','rb'))
 prediction = load_pickle.predict(class_predict_1)
 prediction_prob = load_pickle.predict_proba(class_predict_1)
-st.subheader('Will the Student got a job?')
+st.subheader('Will the Student get a job?')
 job_find = np.array(['No', 'Yes'] )
 st.write(job_find[prediction])
-st.write("With the probability of"+ str(prediction_prob))
+
+st.write("With the probability of "+ str((np.round(100*np.max(prediction_prob),1)))+' %')
 
 st.markdown('---')
 
@@ -149,7 +162,7 @@ load_pickle_1 = pickle.load(open('regressor_model.pkl','rb'))
 prediction_1 = load_pickle_1.predict(X_regress_pre)
 st.subheader('How much is the predicted salary?')
 fin_val = prediction_1/100
-st.write(fin_val)
+st.write(str(np.float64(np.round(fin_val, 2)))+' USD')
 
 
 hide_st_style = """

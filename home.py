@@ -12,11 +12,11 @@ st.success('Please choose one of the menu on the sidebar')
 
 if "my_input" not in st.session_state:
     st.session_state['my_input']= "default"
-my_input = st.text_input('Input a text here', key = ['my_input'])
+my_input = st.text_input('Input favourite word here', key = ['my_input'])
 submit = st.button('Submit')
 if submit:
     st.session_state['my_input'] = my_input
-    st.write('You have entered: ', my_input)
+    st.write('Amazing word: ', my_input)
 
 
 import requests
@@ -34,13 +34,20 @@ def lottie_url(url: str):
         return None
     return r.json()
 
-lottie_hello = lottie_url('https://assets5.lottiefiles.com/packages/lf20_fWd36IjnsR.json')
-lottie_bye = load_lottifile("alfa.json")
-st_lottie(lottie_bye, speed = 1, height = 300, width=700)
 
-
-
-
+lottie_hello = load_lottifile("alfa.json")
+lottie_middle = lottie_url('https://assets4.lottiefiles.com/packages/lf20_gjiu6QkgBx.json')
+lottie_bye = lottie_url('https://assets4.lottiefiles.com/packages/lf20_mKMcjgVTY6.json')
+left, mid, right = st.columns([1,1,1])
+with left:
+    use_container_width = True
+    st_lottie(lottie_hello)
+with mid:
+    use_container_width = True
+    st_lottie(lottie_middle, key = 'midd')
+with right:
+    use_container_width = True
+    st_lottie(lottie_bye, key = 'bye',quality='high', reverse=True)
 hide_st_style = """
         <style>
         #MainMenu {visibility: hidden;}
