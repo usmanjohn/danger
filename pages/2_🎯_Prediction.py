@@ -25,7 +25,7 @@ def lottie_url(url: str):
 pre_lottie=lottie_url('https://assets4.lottiefiles.com/packages/lf20_34qRI0i4ti.json')
 
 
-st_lottie(pre_lottie, key = 'target', height=150)
+st_lottie(pre_lottie, key = 'target', height=100)
 st.markdown('---')
 
 

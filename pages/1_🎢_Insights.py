@@ -14,21 +14,15 @@ st.set_page_config(page_title='Visual Insights',
     layout='wide')
 
 # importing module
-from streamlit_extras.let_it_rain import rain
 
-rain(
-    emoji="🎈",
-    font_size=54,
-    falling_speed=5,
-    animation_length="infinite",
-)
+from streamlit_extras.dataframe_explorer import dataframe_explorer
 # importing required module
 
 
 # Introduction
-st.markdown("<h2 style = 'text-align:center'>Welcome Home</h2>",unsafe_allow_html= True)
+st.markdown("<h2 style = 'text-align:center'> Visual Insights of the Students & Departments</h2>",unsafe_allow_html= True)
 
-st.markdown("Let's analyze some data here!")
+st.markdown('---')
 
 # Reading the dataset
 @st.cache
@@ -64,15 +58,13 @@ def next_data(df):
     df['gender']=df['gender'].map({'M':'Male', 'F':'Female'})
     return df
 dataset = next_data(df=df)
+#Explore Data
+filtered_df = dataframe_explorer(dataset)
+st.dataframe(filtered_df, use_container_width= True)
 
 
-# Dataset
-
-
-
-st.write(dataset)
 # Universal selection
-st.sidebar.header('Universal Filtering')
+st.sidebar.header('Universal Filtering  :game_die:')
 st.sidebar.markdown('Your selection here applies to all graphs')
 st.sidebar.markdown('If you want to apply selection to a certain graph itself, you can use selection box on top of each graphs')
 
@@ -89,7 +81,7 @@ select_gender = st.sidebar.multiselect(label = 'Select Students Gender',
  default=dataset['gender'].unique())
 st.sidebar.markdown('---')
 
-st.markdown('---')
+
 
 df_1 = dataset[(dataset['gender'].isin(select_gender))&(dataset['department'].isin(select_department))&(dataset['work_exp'].isin(select_experience))]
 

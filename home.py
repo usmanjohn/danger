@@ -3,9 +3,9 @@ import streamlit as st
 
 
 st.set_page_config(page_title='Multipage App', page_icon=":anchor:", layout='wide')
-st.markdown('<h3 style =  "text-align:center">Main Page</h3>', unsafe_allow_html=True)
+st.markdown('<h3 style =  "text-align:center">Welcome Home!</h3>', unsafe_allow_html=True)
 
-st.markdown('Hello, this web application is for authoritiy of Universities, such as KAIST. It will help them easily access & controll the information of their University.')
+st.markdown('Hello, this web application is for authoritiy of Universities, such as **KAIST**. It will help them easily **access & controll** the information of the University, Departments etc.')
 st.success('Please choose one of the menu on the sidebar')
 
 
@@ -16,7 +16,7 @@ my_input = st.text_input('Input favourite word here', key = ['my_input'])
 submit = st.button('Submit')
 if submit:
     st.session_state['my_input'] = my_input
-    st.write('Amazing word: ', my_input)
+    st.write('Amazing word: :anchor:', my_input)
 
 
 import requests
@@ -56,5 +56,20 @@ hide_st_style = """
         </style>
         """
 st.markdown(hide_st_style, unsafe_allow_html=True)
+from streamlit_extras.let_it_rain import rain
+rain(
+    emoji="🎈",
+    font_size=54,
+    falling_speed=5,
+    animation_length="infinite",
+)
 
+
+def lottie_url(url: str):
+    r = requests.get(url)
+    if r.status_code != 200:
+        return None
+    return r.json()
+
+pre_lottie=lottie_url('https://assets4.lottiefiles.com/packages/lf20_34qRI0i4ti.json')
 
